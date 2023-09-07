@@ -1,5 +1,7 @@
-// {
-//   "compilerOptions": {
-//     "allowImportingTsExtensions": false
-//   }
-// }
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": false
+  }
+}
