@@ -16,7 +16,7 @@ export const App: FC<{ name: string, menu: number,deleteItem: any }> = (props) =
       <p className="text-3xl font-bold underline">Start editing to see some magic happen :)</p>
       <button onClick={()=>{nav('/home')}}>跳转到app下的某个页面中</button>
       <button onClick={()=>{props.deleteItem(2)}}>点击更新数据</button>
-       <Button>Primary Button</Button>
+       <Button type='dashed'>Primary Button</Button>
        <StepBackwardOutlined />
        <SmileOutlined rotate={180} />
       <FloatButton onClick={() => console.log('click')} />
