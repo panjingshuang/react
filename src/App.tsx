@@ -17,9 +17,9 @@ export const App = () => {
   } = theme.useToken();
 
   return (
-    <Layout>
+    <Layout className='layout-main'>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <img src="./imgs/logo.png" alt="logo" />
+        <img src="./imgs/logo.png" alt="logo" className='w-7 ml-7'/>
         <Menu/>
       </Sider>
       <Layout>
