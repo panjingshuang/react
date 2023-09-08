@@ -1,26 +1,52 @@
-import React ,{ FC } from 'react';
+import React ,{useState}from 'react';
 import { connect } from 'react-redux';
-import { useNavigate } from 'react-router-dom'
 import { deleteItem } from './store/menu/actions';
-import { Button, FloatButton } from 'antd';
+import Head from './Layout/Head';
+import Menu from './Layout/Menu';
+// import Fotter from './Layout/Fotter';
 import {
-  StepBackwardOutlined,
-  SmileOutlined
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
 } from '@ant-design/icons';
-export const App: FC<{ name: string, menu: number,deleteItem: any }> = (props) => {
-  const nav = useNavigate()
+import { Layout, Button, theme } from 'antd';
+const { Header, Sider, Content } = Layout;
+export const App = () => {
+  const [collapsed, setCollapsed] = useState(false);
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+
   return (
-    <div>
-      <h1>Hello {props.name}!</h1>
-      {props.menu}
-      <p className="text-3xl font-bold underline">Start editing to see some magic happen :)</p>
-      <button onClick={()=>{nav('/home')}}>跳转到app下的某个页面中</button>
-      <button onClick={()=>{props.deleteItem(2)}}>点击更新数据</button>
-      <Button type='dashed'>Primary Button</Button>
-      <StepBackwardOutlined />
-      <SmileOutlined rotate={180} />
-      <FloatButton onClick={() => console.log('click')} />
-    </div>
+    <Layout>
+      <Sider trigger={null} collapsible collapsed={collapsed}>
+        <img src="./imgs/logo.png" alt="logo" />
+        <Menu/>
+      </Sider>
+      <Layout>
+        <Header style={{ padding: 0, background: colorBgContainer }}>
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{
+              fontSize: '16px',
+              width: 64,
+              height: 64,
+            }}
+          />
+        </Header>
+        <Content
+          style={{
+            margin: '24px 16px',
+            padding: 24,
+            minHeight: 280,
+            background: colorBgContainer,
+          }}
+        >
+          Content
+        </Content>
+      </Layout>
+    </Layout>
   );
 };
 

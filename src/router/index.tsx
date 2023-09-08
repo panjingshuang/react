@@ -8,7 +8,7 @@ const Main = lazy(()=> { return import('../Layout/Main')})
 export default createBrowserRouter([
   {
     path: '/',
-    element: <App name="zhangsan"/>,
+    element: <App/>,
     children: [],
   },
   {

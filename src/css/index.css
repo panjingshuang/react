@@ -5,3 +5,7 @@ h1,
 p {
   font-family: Lato;
 }
+#root{
+  width: 100vw;
+  height: 100vh;
+}
