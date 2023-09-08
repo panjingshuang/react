@@ -1,18 +1,18 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-
-
-import { App } from '../App';
-import Main from '../LayOut/Main'
+import App from '../App';
+import Main from '../Layout/Main'
+// const App  = lazy(()=> { return import('../App')})
+// const Main = lazy(()=> { return import('../Layout/Main')})
 
 export default createBrowserRouter([
   {
     path: '/',
-    element: <App name={2 > 10 ? '10' : '2'} />,
+    element: <App name="zhangsan"/>,
     children: [],
   },
   {
     path: '/home',
-    element: <Main/>  
+    element: <Main/>
   },
 ]);
