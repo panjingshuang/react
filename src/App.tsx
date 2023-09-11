@@ -5,9 +5,10 @@ import Menu from './Layout/Menu';
 import Head from './Layout/Head';
 import { Layout,  theme } from 'antd';
 import Main from './component/Main';
+import Tab from './component/Tab';
 
 const { Sider, Content } = Layout;
-export const App = () => {
+const App = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -24,6 +25,7 @@ export const App = () => {
       </Sider>
       <Layout>
         <Head collapsed={collapsed} onClick={handleClickbyCollapsed}/>
+        <Tab/>
         <Content
           style={{
             margin: '24px 16px',
@@ -39,6 +41,4 @@ export const App = () => {
   );
 };
 
-export default connect(function (state: any) {
-  return { menu: state.menuReducer };
-},{deleteItem})(App);
+export default App

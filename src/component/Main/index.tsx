@@ -1,6 +1,7 @@
 import React from 'react';
-import { useRoutes,Routes ,Route} from "react-router-dom";
-import {routes} from '../../router';
+// import { useRoutes,Routes ,Route} from "react-router-dom";
+import { Routes ,Route} from "react-router-dom";
+// import {routes} from '../../router';
 import MyChart from '../MyChart';
 import Statistics from '../Statistics';
 import MonthExpenses from '../MonthExpenses';

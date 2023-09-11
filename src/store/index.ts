@@ -5,7 +5,8 @@ import {
 } from 'redux';
 import thunk from 'redux-thunk';
 import menuReducer from './menu/reducer';
-const allReducers = combineReducers({ menuReducer });
+import tabsReducer from './tabs/redcer'
+const allReducers = combineReducers({ menuReducer,tabsReducer });
 const store = createStore(allReducers, applyMiddleware(thunk));
 export const dispatch = store.dispatch;
 export default store;
