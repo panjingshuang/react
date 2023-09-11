@@ -1,18 +1,35 @@
 import React, { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-// import App from '../App';
-// import Main from '../Layout/Main'
-const App  = lazy(()=> { return import('../App')})
-const Main = lazy(()=> { return import('../Layout/Main')})
+import { Navigate } from 'react-router-dom';
 
-export default createBrowserRouter([
+const App  = lazy(()=> { return import('../App')})
+const MonthExpenses  = lazy(()=> { return import('../component/MonthExpenses')})
+const Statistics  = lazy(()=> { return import('../component/Statistics')})
+const MyChart  = lazy(()=> { return import('../component/MyChart')})
+const NotFind = lazy(()=>{return import('../component/NotFind')})
+
+export const routes  = [
   {
     path: '/',
     element: <App/>,
-    children: [],
+    children:[
+      {
+        path: '/MyChart',
+        element: <MyChart/>
+      },
+      {
+        path: '/Statistics',
+        element: <Statistics/>
+      },
+      {
+        path: '/MonthExpenses',
+        element: <MonthExpenses/>
+      },{
+        path: '/404',
+        element: <NotFind/>
+      }
+    ]
   },
-  {
-    path: '/home',
-    element: <Main/>
-  },
-]);
+  { path: '*', element: <Navigate to="/404" replace /> }
+]
+export default createBrowserRouter(routes);

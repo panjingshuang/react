@@ -1,40 +1,29 @@
 import React ,{useState}from 'react';
 import { connect } from 'react-redux';
 import { deleteItem } from './store/menu/actions';
-import Head from './Layout/Head';
 import Menu from './Layout/Menu';
-// import Fotter from './Layout/Fotter';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-} from '@ant-design/icons';
-import { Layout, Button, theme } from 'antd';
-const { Header, Sider, Content } = Layout;
+import Head from './Layout/Head';
+import { Layout,  theme } from 'antd';
+import Main from './component/Main';
+
+const { Sider, Content } = Layout;
 export const App = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  const handleClickbyCollapsed = ()=>{
+    setCollapsed(!collapsed)
+  }
   return (
     <Layout className='layout-main'>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <img src="./imgs/logo.png" alt="logo" className='w-7 ml-7'/>
-        <Menu/>
+        <Menu />
       </Sider>
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }}>
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
-          />
-        </Header>
+        <Head collapsed={collapsed} onClick={handleClickbyCollapsed}/>
         <Content
           style={{
             margin: '24px 16px',
@@ -43,7 +32,7 @@ export const App = () => {
             background: colorBgContainer,
           }}
         >
-          Content
+          <Main/>
         </Content>
       </Layout>
     </Layout>
