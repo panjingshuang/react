@@ -11,7 +11,8 @@ function MyMenu(props) {
     let ele = menus.find(e => e.key == item.key)
     props.addItem({
       label:ele.label,
-      key: item.key
+      key: item.key,
+      active:true
     })
   }
   return (
