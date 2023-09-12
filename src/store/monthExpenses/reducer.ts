@@ -77,6 +77,10 @@ export default function monthExpensesReducer(preState = initState, action) {
       }
       preState.push(item)
       return [...preState] ;
+    case CONST_MONTH_EXPENSES.EDIT_ITEM:
+      let item_re = preState.find(item => item.key == data.key)
+      Object.assign(item_re,data)
+      return [...preState]
     default:
       return preState;
   }

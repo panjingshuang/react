@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Space, Tag, DatePicker, Button, Input, Select } from 'antd';
+import { Table, Space, Tag, DatePicker, Button, Input, Select, Popconfirm,message } from 'antd';
 import { connect } from 'react-redux';
 import type { ColumnsType } from 'antd/es/table';
 import locale from 'antd/es/date-picker/locale/zh_CN';
@@ -33,30 +33,50 @@ interface DataType {
 function MonthExpenses(props) {
   const [isEdit, setEditStatus] = useState(-1)
   const [formData, setFormData] = useState<DataType>()
+  const [messageApi, contextHolder] = message.useMessage();
   const onChange = () => {
   }
   const handleAdd = () => {
     props.addItem()
   }
+  const handleDelete = (record) => {
+    // 判断是否要弹出
+    props.deleteItem(record.key)
+  }
+  const testForm = (formData) => {
+    for (let key of Object.keys(formData)) {
+      if (key != 'key' && (!formData[key] || formData[key].length < 1)) {
+        return false
+      }
+    }
+    return true
+  }
   const handleEdit = (record) => {
-    if(isEdit == record.key){ // 保存
-      // 数据保存
-      // 提交数据到store中
-    }else{  // 变成编辑
+    if (isEdit == record.key) { // 保存
+      if(!testForm(formData)){
+        messageApi.open({
+          type: 'warning',
+          content: '请输入正确信息！',
+        });
+        return 
+      }
+      setEditStatus(-1)
+      props.editIem(formData)
+    } else {  // 变成编辑
       setFormData(record)
       setEditStatus(record.key)
     }
   }
-  const handleFrom = (e,type)=>{
-    const SELECT_LIST_TYPE = ['amountType','payType']
-    let value 
-    if(SELECT_LIST_TYPE.indexOf(type) > -1){
+  const handleFrom = (e, type) => {
+    const SELECT_LIST_TYPE = ['amountType', 'payType']
+    let value
+    if (SELECT_LIST_TYPE.indexOf(type) > -1) {
       value = e
-    }else{
+    } else {
       value = e.target.value
     }
     formData[type] = value
-    setFormData({...formData})
+    setFormData({ ...formData })
   }
   const columns: ColumnsType<DataType> = [
     {
@@ -64,7 +84,7 @@ function MonthExpenses(props) {
       dataIndex: 'consume',
       key: 'consume',
       render: (_, record) => (
-        <div>{isEdit == record.key ? <Input placeholder="请输入消费名称"  value={formData['consume']} onChange={(e)=>{handleFrom(e,'consume')}}/> : _}</div>
+        <div>{isEdit == record.key ? <Input placeholder="请输入消费名称" value={formData['consume']} onChange={(e) => { handleFrom(e, 'consume') }} /> : _}</div>
       ),
     },
     {
@@ -76,7 +96,7 @@ function MonthExpenses(props) {
           value={formData['amountType']}
           style={{ width: 120 }}
           options={AMOUNT_Type}
-          onChange={(e)=>{handleFrom(e,'amountType')}}
+          onChange={(e) => { handleFrom(e, 'amountType') }}
         /> : _}</div>
       ),
     },
@@ -85,7 +105,7 @@ function MonthExpenses(props) {
       dataIndex: 'amount',
       key: 'amount',
       render: (_, record) => (
-        <div>{isEdit == record.key ? <Input placeholder="请输入消费金额" value={formData['amount']} onChange={(e)=>{handleFrom(e,'amount')}}/> : _}</div>
+        <div>{isEdit == record.key ? <Input placeholder="请输入消费金额" value={formData['amount']} onChange={(e) => { handleFrom(e, 'amount') }} /> : _}</div>
       ),
     },
     {
@@ -96,7 +116,7 @@ function MonthExpenses(props) {
         <div>{isEdit == record.key ? <Select
           value={formData['payType']}
           style={{ width: 120 }}
-          onChange={(e)=>{handleFrom(e,'payType')}}
+          onChange={(e) => { handleFrom(e, 'payType') }}
           options={PAY_TYPE}
         /> : <Tag color={PAY_TAG[_]}>{PAY_TYPE_OBJ[_]}</Tag>}</div>
       ),
@@ -106,7 +126,7 @@ function MonthExpenses(props) {
       dataIndex: 'detail',
       key: 'detail',
       render: (_, record) => (
-        <div>{isEdit == record.key ? <TextArea rows={2} value={formData['detail']} onChange={(e)=>{handleFrom(e,'detail')}}/> : _}</div>
+        <div>{isEdit == record.key ? <TextArea rows={2} value={formData['detail']} onChange={(e) => { handleFrom(e, 'detail') }} /> : _}</div>
       ),
     },
     {
@@ -119,8 +139,16 @@ function MonthExpenses(props) {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <Button type="dashed" onClick={() => { handleEdit(record) }}>{isEdit == record.key ? '保存' : '编辑' } </Button>
-          <Button danger type="dashed" >删除</Button>
+          <Button type="dashed" onClick={() => { handleEdit(record) }}>{isEdit == record.key ? '保存' : '编辑'} </Button>
+          <Popconfirm
+            title="Delete the task"
+            description="Are you sure to delete this task?"
+            onConfirm={() => { handleDelete(record) }}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger type="dashed">删除</Button>
+          </Popconfirm>
         </Space>
       ),
     },
@@ -128,6 +156,7 @@ function MonthExpenses(props) {
 
   return (
     <>
+      {contextHolder}
       <Space className='mb-5'>
         <DatePicker onChange={onChange} picker="month" locale={locale} />
         <Button type="dashed" icon={<SearchOutlined />}>
@@ -142,4 +171,4 @@ function MonthExpenses(props) {
 
 export default connect(function (state: any) {
   return { data: state.monthExpensesReducer }
-}, { addItem })(MonthExpenses)
+}, { addItem, deleteItem,editIem })(MonthExpenses)
