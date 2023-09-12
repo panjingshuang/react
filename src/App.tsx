@@ -1,6 +1,4 @@
 import React ,{useState}from 'react';
-import { connect } from 'react-redux';
-import { deleteItem } from './store/menu/actions';
 import Menu from './Layout/Menu';
 import Head from './Layout/Head';
 import { Layout,  theme } from 'antd';

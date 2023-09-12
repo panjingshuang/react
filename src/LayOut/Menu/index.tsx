@@ -8,7 +8,7 @@ function MyMenu(props) {
   const navigate = useNavigate();
   const handleClick = (item)=>{
     navigate(item.key)
-    let ele = menus.find(e => e.key == item.key)
+    let ele = menus.find(e => e.key === item.key)
     props.addItem({
       label:ele.label,
       key: item.key,

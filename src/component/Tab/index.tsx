@@ -16,14 +16,14 @@ function Tab(props) {
     navigator(key)
   };
   const onEdit = (targetKey: TargetKey, action: 'add' | 'remove')=>{
-    if(action == 'remove') {
+    if(action === 'remove') {
       props.deleteItem(targetKey)
-      navigator(props.tabs[props.tabs.length - 1].key)
     }
   }
   useEffect(()=>{
-    let item = props.tabs.find(item => item.active == true)
+    let item = props.tabs.find(item => item.active === true)
     setActiveKey(item.key)
+    navigator(item.key)
   },[props.tabs])
   return (
     <>
