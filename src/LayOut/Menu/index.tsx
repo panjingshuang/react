@@ -8,8 +8,9 @@ function MyMenu(props) {
   const navigate = useNavigate();
   const handleClick = (item)=>{
     navigate(item.key)
+    let ele = menus.find(e => e.key == item.key)
     props.addItem({
-      babel:item.babel,
+      label:ele.label,
       key: item.key
     })
   }
@@ -26,6 +27,4 @@ function MyMenu(props) {
 
 export default connect(function (state: any){ 
   return {tabs: state.tabsReducer}
-},{
-  addItem
-})(MyMenu)
+},{addItem})(MyMenu)

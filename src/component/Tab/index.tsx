@@ -8,22 +8,22 @@ import {
 type TargetKey = React.MouseEvent | React.KeyboardEvent | string;
 
 function Tab(props) {
-  console.log(props)
-  const [activeKey, setActiveKey] = useState('1')
+  const [activeKey, setActiveKey] = useState(props.tabs[0].key)
   const onChange = (key: string) => {
     setActiveKey(key);
   };
   const onEdit = (targetKey: TargetKey, action: 'add' | 'remove')=>{
     if(action == 'remove') props.deleteItem(targetKey)
   }
+console.log(props.tabs)
   return (
     <>
       <Tabs
         hideAdd
         onChange={onChange}
-        activeKey={props.activeKey}
+        activeKey={activeKey}
         type="editable-card"
-        items={props.items}
+        items={props.tabs}
         onEdit={onEdit}
       />
     </>
