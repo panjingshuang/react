@@ -1,4 +1,7 @@
 import {CONST_MONTH_EXPENSES} from '../const'
+import {
+  changeListToObject
+} from '../../utils'
 const initState = [
   {
     key: 0,
@@ -35,7 +38,7 @@ export const PAY_TAG = {
   'YHC' : 'red'
 }
 
-export const AMOUNT_Type = [
+export const AMOUNT_TYPE = [
   {value: 'PRODUCTION',label: '生产饮食'},
   {value: 'DAYLIFE',label: '生活饮食'},
   {value: 'TRAVEL',label: '交通出行'},
@@ -45,17 +48,7 @@ export const AMOUNT_Type = [
   {value: 'OTHER',label: '其他'},
 ]
 
-interface IListType{
-  value: string,
-  label: string
-}
-function changeListToObject(list:IListType[]){
-  let object = {}
-  list.forEach(item =>{
-    object[item.value] = item.label
-  } )
-  return object
-}
+export const AMOUNT_TYPE_OBJ = changeListToObject(AMOUNT_TYPE)
 
 export default function monthExpensesReducer(preState = initState, action) {
   if (!preState) preState = initState;
@@ -73,12 +66,12 @@ export default function monthExpensesReducer(preState = initState, action) {
         amountType: "",
         payType: "",
         detail: "",
-        time: `${new Date().getMonth() + 1}月${new Date().getDate()}日`
+        time: `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`
       }
       preState.push(item)
       return [...preState] ;
     case CONST_MONTH_EXPENSES.EDIT_ITEM:
-      let item_re = preState.find(item => item.key == data.key)
+      let item_re = preState.find(item => item.key === data.key)
       Object.assign(item_re,data)
       return [...preState]
     default:

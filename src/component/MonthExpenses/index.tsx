@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Table, Space, Tag, DatePicker, Button, Input, Select, Popconfirm,message } from 'antd';
 import { connect } from 'react-redux';
 import type { ColumnsType } from 'antd/es/table';
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import 'dayjs/locale/zh-cn';
-import { SearchOutlined } from '@ant-design/icons';
 import {
   deleteItem,
   addItem,
@@ -13,9 +12,10 @@ import {
 } from '../../store/monthExpenses/actions'
 import {
   PAY_TYPE,
-  AMOUNT_Type,
+  AMOUNT_TYPE,
   PAY_TAG,
-  PAY_TYPE_OBJ
+  PAY_TYPE_OBJ,
+  AMOUNT_TYPE_OBJ
 } from '../../store/monthExpenses/reducer'
 const { TextArea } = Input;
 
@@ -34,7 +34,10 @@ function MonthExpenses(props) {
   const [isEdit, setEditStatus] = useState(-1)
   const [formData, setFormData] = useState<DataType>()
   const [messageApi, contextHolder] = message.useMessage();
-  const onChange = () => {
+  const MonthData = useRef([...props.data])
+  const onChange = (_,stt) => {
+    console.log(MonthData.current)
+    props.searchList(stt)
   }
   const handleAdd = () => {
     props.addItem()
@@ -45,14 +48,14 @@ function MonthExpenses(props) {
   }
   const testForm = (formData) => {
     for (let key of Object.keys(formData)) {
-      if (key != 'key' && (!formData[key] || formData[key].length < 1)) {
+      if (key !== 'key' && (!formData[key] || formData[key].length < 1)) {
         return false
       }
     }
     return true
   }
   const handleEdit = (record) => {
-    if (isEdit == record.key) { // 保存
+    if (isEdit === record.key) { // 保存
       if(!testForm(formData)){
         messageApi.open({
           type: 'warning',
@@ -83,37 +86,41 @@ function MonthExpenses(props) {
       title: '消费名称',
       dataIndex: 'consume',
       key: 'consume',
+      width: 150,
       render: (_, record) => (
-        <div>{isEdit == record.key ? <Input placeholder="请输入消费名称" value={formData['consume']} onChange={(e) => { handleFrom(e, 'consume') }} /> : _}</div>
+        <div>{isEdit === record.key ? <Input placeholder="请输入消费名称" value={formData['consume']} onChange={(e) => { handleFrom(e, 'consume') }} /> : _}</div>
       ),
     },
     {
       title: '消费类型',
       dataIndex: 'amountType',
       key: 'amountType',
+      width: 150,
       render: (_, record) => (
-        <div>{isEdit == record.key ? <Select
+        <div>{isEdit === record.key ? <Select
           value={formData['amountType']}
           style={{ width: 120 }}
-          options={AMOUNT_Type}
+          options={AMOUNT_TYPE}
           onChange={(e) => { handleFrom(e, 'amountType') }}
-        /> : _}</div>
+        /> : AMOUNT_TYPE_OBJ[_]}</div>
       ),
     },
     {
       title: '消费金额',
       dataIndex: 'amount',
       key: 'amount',
+      width: 150,
       render: (_, record) => (
-        <div>{isEdit == record.key ? <Input placeholder="请输入消费金额" value={formData['amount']} onChange={(e) => { handleFrom(e, 'amount') }} /> : _}</div>
+        <div>{isEdit === record.key ? <Input placeholder="请输入消费金额" value={formData['amount']} onChange={(e) => { handleFrom(e, 'amount') }} /> : _}</div>
       ),
     },
     {
       title: '支付方式',
       dataIndex: 'payType',
       key: 'payType',
+      width: 150,
       render: (_, record) => (
-        <div>{isEdit == record.key ? <Select
+        <div>{isEdit === record.key ? <Select
           value={formData['payType']}
           style={{ width: 120 }}
           onChange={(e) => { handleFrom(e, 'payType') }}
@@ -125,21 +132,25 @@ function MonthExpenses(props) {
       title: '详情',
       dataIndex: 'detail',
       key: 'detail',
+      width: 150,
+      ellipsis:true,
       render: (_, record) => (
-        <div>{isEdit == record.key ? <TextArea rows={2} value={formData['detail']} onChange={(e) => { handleFrom(e, 'detail') }} /> : _}</div>
+        <div>{isEdit === record.key ? <TextArea rows={2} value={formData['detail']} onChange={(e) => { handleFrom(e, 'detail') }} /> : _}</div>
       ),
     },
     {
       title: '修改时间',
       dataIndex: 'time',
       key: 'time',
+      width: 150,
     },
     {
       title: 'Action',
       key: 'action',
+      width: 150,
       render: (_, record) => (
         <Space size="middle">
-          <Button type="dashed" onClick={() => { handleEdit(record) }}>{isEdit == record.key ? '保存' : '编辑'} </Button>
+          <Button type="dashed" onClick={() => { handleEdit(record) }}>{isEdit === record.key ? '保存' : '编辑'} </Button>
           <Popconfirm
             title="Delete the task"
             description="Are you sure to delete this task?"
@@ -159,9 +170,6 @@ function MonthExpenses(props) {
       {contextHolder}
       <Space className='mb-5'>
         <DatePicker onChange={onChange} picker="month" locale={locale} />
-        <Button type="dashed" icon={<SearchOutlined />}>
-          Search
-        </Button>
         <Button onClick={handleAdd}>新增消费</Button>
       </Space>
       <Table columns={columns} dataSource={props.data} />
@@ -171,4 +179,4 @@ function MonthExpenses(props) {
 
 export default connect(function (state: any) {
   return { data: state.monthExpensesReducer }
-}, { addItem, deleteItem,editIem })(MonthExpenses)
+}, { addItem, deleteItem,editIem,searchList })(MonthExpenses)
