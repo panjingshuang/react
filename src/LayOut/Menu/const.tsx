@@ -15,7 +15,7 @@ export default  [{
   icon: <VideoCameraOutlined/>,
   key:'/Statistics'
 },{
-  label: '每月支出情况',
+  label: '情况',
   icon: <UserOutlined/>,
   key:'/MonthExpenses'
 }]
